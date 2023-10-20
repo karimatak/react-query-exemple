@@ -5,6 +5,11 @@ const getAllCountriesRequest = async () => {
     return await axios.get("http://localhost:5555/api/ms-data/v1/countries/all");
 }
 
+const getPaginatedCountriesRequest = async (params) => {
+    // console.log("PARAMS INSIDE SERVICE --> ", params);
+    return (await axios.get("http://localhost:5555/api/ms-data/v1/countries", { params }));
+}
+
 const createCountryRequest = async (data) => {
     return await axios.post("http://localhost:5555/api/ms-data/v1/countries", data)
 }
@@ -22,6 +27,7 @@ const updateCountryRequest = async (data, countryId) => {
 
 export {
     getAllCountriesRequest,
+    getPaginatedCountriesRequest,
     createCountryRequest,
     getCountryById,
     updateCountryRequest

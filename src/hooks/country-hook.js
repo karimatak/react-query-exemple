@@ -1,19 +1,38 @@
-import {getAllCountriesRequest, createCountryRequest, getCountryById, updateCountryRequest} from "@/service/dataRequests/countryService";
+import { getAllCountriesRequest, createCountryRequest, getCountryById, updateCountryRequest, getPaginatedCountriesRequest } from "@/service/dataRequests/countryService";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 
 
 const useAllCountries = () => {
-    return useQuery(["countries"],  getAllCountriesRequest);
+  return useQuery({
+    queryKey: ["countries"],
+    queryFn: getAllCountriesRequest
+  });
 };
 
+const usePaginatedCountries = (searchParams) => {
+  const urlSearchParams = new URLSearchParams(searchParams.toString())
+
+  const page = urlSearchParams.get('page');
+
+  if (page) {
+    urlSearchParams.set("page", parseInt(page) - 1)
+  }
+
+  return useQuery({
+    queryKey: ["countries", urlSearchParams.toString()],
+    queryFn: async () => await getPaginatedCountriesRequest(urlSearchParams)
+  })
+}
+
+
 const useCountryById = (countryId) => {
-  return useQuery(["countries", {countryId}], getCountryById);
+  return useQuery(["countries", { countryId }], getCountryById, { refetchOnWindowFocus: false, enabled: !!countryId });
 };
 
 
 
 const useCreateCountry = () => {
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation(
     (data) => {
       return createCountryRequest(data);
@@ -35,7 +54,8 @@ const useUpdateCountry = (countryId) => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("countries");
+        queryClient.invalidateQueries(["countries"]);
+        queryClient.invalidateQueries(["countries", { countryId }]);
       },
     }
   );
@@ -43,8 +63,9 @@ const useUpdateCountry = (countryId) => {
 
 
 export {
-    useAllCountries,
-    useCreateCountry,
-    useCountryById,
-    useUpdateCountry
-  };
+  useAllCountries,
+  usePaginatedCountries,
+  useCreateCountry,
+  useCountryById,
+  useUpdateCountry
+};

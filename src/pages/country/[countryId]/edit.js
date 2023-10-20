@@ -12,16 +12,15 @@ const EditCountry = ({ countryId }) => {
     const router = useRouter();
 
     const handleSubmit = (country) => {
-    editMutate(
-      country,
-      {
-        onSuccess: (response) => {
-            console.log("SUCCESS !!! ", response);
-          router.push("/");
-        },
-      }
-    );
-  };
+        editMutate(
+            country,
+            {
+                onSuccess: () => {
+                    router.push("/");
+                },
+            }
+        );
+    };
 
     return (
         <main className="flex min-h-screen flex-col items-center p-24">
@@ -34,7 +33,7 @@ const EditCountry = ({ countryId }) => {
 
 
 
-export async function getStaticProps({params}) {
+export async function getStaticProps({ params }) {
     const countryId = params?.countryId;
     return {
         props: {
