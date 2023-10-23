@@ -6,14 +6,13 @@ import { usePaginatedCountries } from "@/hooks/country-hook";
 import { useSearchParams } from "next/navigation";
 import Loading from '@/components/Loading';
 
-import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { getPaginatedCountriesRequest } from "@/service/dataRequests/countryService";
 const inter = Inter({ subsets: ['latin'] })
 
 
-export default function CountriesWithSSR() {
+export default function CountriesWithSSR2({ countries }) {
     const searchParams = useSearchParams();
-    const { data, isLoading } = usePaginatedCountries(searchParams);
+    const { data, isLoading } = usePaginatedCountries(searchParams, countries);
 
     if (isLoading) {
         return <Loading />
@@ -52,26 +51,19 @@ export default function CountriesWithSSR() {
 
 export const getServerSideProps = async (ctx) => {
     const { query } = ctx;
-    const queryClient = new QueryClient()
-
     const params = new URLSearchParams(query);
-
     const page = params.get('page');
 
     if (page) {
         params.set("page", parseInt(page) - 1)
     }
 
-    // prefetch data on the server
-    await queryClient.fetchQuery(
-        ['countries', params.toString()],
-        async () => (await getPaginatedCountriesRequest(params)).data
-    )
+    const response = await getPaginatedCountriesRequest(params);
+    const countries = response.data;
 
     return {
         props: {
-            // dehydrate query cache
-            dehydratedState: dehydrate(queryClient),
+            countries
         },
     }
 }

@@ -9,7 +9,7 @@ const useAllCountries = () => {
   });
 };
 
-const usePaginatedCountries = (searchParams) => {
+const usePaginatedCountries = (searchParams, initialData = undefined) => {
   const urlSearchParams = new URLSearchParams(searchParams.toString())
 
   const page = urlSearchParams.get('page');
@@ -20,7 +20,11 @@ const usePaginatedCountries = (searchParams) => {
 
   return useQuery({
     queryKey: ["countries", urlSearchParams.toString()],
-    queryFn: async () => await getPaginatedCountriesRequest(urlSearchParams)
+    queryFn: async () => {
+      const response = await getPaginatedCountriesRequest(urlSearchParams);
+      return response.data
+    },
+    initialData: initialData
   })
 }
 

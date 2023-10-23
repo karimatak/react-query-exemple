@@ -24,14 +24,15 @@ export default function Home() {
     >
       <div className='flex'>
         <Link href="/country/add" className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'><h2>Add new Country</h2></Link>
-        <Link href="/countries-with-ssr" className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'><h2>Countries SSR</h2></Link>
+        <Link href="/countries-with-ssr" className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'><h2>Countries with SSR using hydration</h2></Link>
+        <Link href="/countries-with-ssr-2" className='bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow'><h2>Countries with SSR using initialData</h2></Link>
       </div>
-      <h2 className='my-5 text-lg'>Total count: {data?.data?.content?.length}</h2>
+      <h2 className='my-5 text-lg'>Total count: {data?.content?.length}</h2>
       {console.log("rendered")}
       <table className='text-white'>
         <tbody>
           {
-            data?.data?.content?.map(country => (
+            data?.content?.map(country => (
               <tr key={country.id}>
                 <td className='w-[50px]'>{country.id}</td>
                 <td className='w-[50px]'>{country.isoCode}</td>
@@ -46,7 +47,7 @@ export default function Home() {
         </tbody>
       </table>
 
-      <Pagination totalPages={data?.data?.totalPages} />
+      <Pagination totalPages={data?.totalPages} />
 
     </main>
   )
