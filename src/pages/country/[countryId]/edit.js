@@ -5,14 +5,14 @@ import { useRouter } from "next/router";
 
 const EditCountry = ({ countryId }) => {
 
-    const { mutate: editMutate, isLoading, isError } = useUpdateCountry(countryId);
+    const { mutate: updateCountry } = useUpdateCountry(countryId);
 
     const { data, isFetched } = useCountryById(countryId);
 
     const router = useRouter();
 
     const handleSubmit = (country) => {
-        editMutate(
+        updateCountry(
             country,
             {
                 onSuccess: () => {

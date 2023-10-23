@@ -6,7 +6,7 @@ const getAllCountriesRequest = async () => {
 }
 
 const getPaginatedCountriesRequest = async (params) => {
-    // console.log("PARAMS INSIDE SERVICE --> ", params);
+    // console.log("PARAMS --> ", params);
     return (await axios.get("http://localhost:5555/api/ms-data/v1/countries", { params }));
 }
 
@@ -14,10 +14,7 @@ const createCountryRequest = async (data) => {
     return await axios.post("http://localhost:5555/api/ms-data/v1/countries", data)
 }
 
-const getCountryById = async ({ queryKey }) => {
-    const [_key, { countryId }] = queryKey
-
-    console.log("HERE --> ", countryId);
+const getCountryById = async (countryId) => {
     return await axios.get(`http://localhost:5555/api/ms-data/v1/countries/${countryId}`)
 }
 

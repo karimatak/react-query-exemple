@@ -26,7 +26,11 @@ const usePaginatedCountries = (searchParams) => {
 
 
 const useCountryById = (countryId) => {
-  return useQuery(["countries", { countryId }], getCountryById, { refetchOnWindowFocus: false, enabled: !!countryId });
+  return useQuery(
+    ["countries", { countryId }],
+    async () => await getCountryById(countryId),
+    { refetchOnWindowFocus: false, enabled: !!countryId }
+  );
 };
 
 

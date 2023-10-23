@@ -3,6 +3,7 @@ import { usePaginatedCountries } from '@/hooks/country-hook'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import Pagination from '@/components/Pagination';
+import Loading from '@/components/Loading';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,6 +13,10 @@ export default function Home() {
   const searchParams = useSearchParams();
   const { data, isLoading, } = usePaginatedCountries(searchParams);
 
+
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <main
